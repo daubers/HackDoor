@@ -1,8 +1,13 @@
 from wsmain import WSHandler
 import tornado
+import rfid_reader as rfid
+
+rfidthread = rfid.rfid_reader("/dev/ttyUSB0", 9600)
+rfidthread.setDaemon(True)
+rfidthread.start()
 
 application = tornado.web.Application([
-    (r'/ws', WSHandler),
+    (r'/ws', WSHandler, {"rfidthread": rfidthread}),
 ])
 
 

@@ -1,17 +1,15 @@
 from wsmain import WSHandler
-import tornado
+from tornado import web, httpserver, ioloop
 import rfid_reader as rfid
 
 rfidthread = rfid.rfid_reader("/dev/ttyUSB0", 9600)
 rfidthread.setDaemon(True)
 rfidthread.start()
 
-application = tornado.web.Application([
-    (r'/ws', WSHandler, {"rfidthread": rfidthread}),
-])
+application = web.Application([(r'/ws', WSHandler, {"rfidthread": rfidthread}), ])
 
 
 if __name__ == "__main__":
-    http_server = tornado.httpserver.HTTPServer(application)
+    http_server = httpserver.HTTPServer(application)
     http_server.listen(8888)
-    tornado.ioloop.IOLoop.instance().start()
+    ioloop.IOLoop.instance().start()

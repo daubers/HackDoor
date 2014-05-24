@@ -23,6 +23,7 @@ class rfid_reader(Thread):
                 data = self.ser.readline()
                 for subscriber in self.subscribers:
                     subscriber(data.strip("\n"))
+
     def start(self):
         self.running = True
         super(rfid_reader, self).start()
